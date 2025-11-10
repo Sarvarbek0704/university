@@ -1,0 +1,72 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: university-app
+    ports:
+      - "3333:3333"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=university_management
+      - DB_SYNC=false
+      - DB_LOGGING=false
+      - JWT_ACCESS_SECRET=your_production_jwt_access_secret_here
+      - JWT_REFRESH_SECRET=your_production_jwt_refresh_secret_here
+      - JWT_ACCESS_EXPIRES_IN=15m
+      - JWT_REFRESH_EXPIRES_IN=7d
+      - EMAIL_HOST=smtp.gmail.com
+      - EMAIL_PORT=587
+      - EMAIL_USER=your_production_email@gmail.com
+      - EMAIL_PASS=your_app_specific_password
+      - EMAIL_FROM=noreply@university.uz
+      - FRONTEND_URL=https://yourdomain.com
+      - OTP_EXPIRES_IN=10
+      - OTP_LENGTH=6
+      - DEFAULT_ADMIN_EMAIL=superadmin@university.uz
+      - DEFAULT_ADMIN_PASSWORD=Admin123!
+      - DEFAULT_ADMIN_PHONE=+998901234567
+      - BCRYPT_ROUNDS=12
+      - LOG_LEVEL=info
+      - CREATOR_MODE=false
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3333/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: university-postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=university_management
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+
+networks:
+  default:
+    name: university-network
