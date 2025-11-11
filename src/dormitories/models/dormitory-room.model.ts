@@ -12,7 +12,7 @@ import {
   BeforeCreate,
 } from "sequelize-typescript";
 import { Dormitory } from "./dormitory.model";
-// import { InfoStudent } from "../../info-students/models/info-student.model";
+import { InfoStudent } from "../../info_students/models/info_student.model";
 
 @Table({
   tableName: "dormitory_rooms",
@@ -144,12 +144,11 @@ export class DormitoryRoom extends Model {
   })
   is_available: boolean;
 
-  // Associations
   @BelongsTo(() => Dormitory)
   dormitory: Dormitory;
 
-  //   @HasMany(() => InfoStudent)
-  //   students: InfoStudent[];
+  @HasMany(() => InfoStudent)
+  students: InfoStudent[];
 
   @BeforeUpdate
   @BeforeCreate
@@ -159,7 +158,6 @@ export class DormitoryRoom extends Model {
     }
   }
 
-  // Instance methods
   async getOccupiedBedsCount(): Promise<number> {
     const studentsCount = await this.$count("students");
     return studentsCount;

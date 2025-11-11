@@ -1,34 +1,71 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { BorrowedBooksService } from './borrowed_books.service';
-import { CreateBorrowedBookDto } from './dto/create-borrowed_book.dto';
-import { UpdateBorrowedBookDto } from './dto/update-borrowed_book.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Query,
+  UseGuards,
+  ParseIntPipe,
+} from "@nestjs/common";
+import { ApiTags, ApiOperation, ApiBearerAuth } from "@nestjs/swagger";
+import { BorrowedBooksService } from "./borrowed_books.service";
+import { BorrowBookDto } from "./dto/borrow-book.dto";
+import { ReturnBookDto } from "./dto/return-book.dto";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 
-@Controller('borrowed-books')
+@ApiTags("borrowed-books")
+@ApiBearerAuth("JWT-auth")
+@Controller("borrowed-books")
 export class BorrowedBooksController {
   constructor(private readonly borrowedBooksService: BorrowedBooksService) {}
 
-  @Post()
-  create(@Body() createBorrowedBookDto: CreateBorrowedBookDto) {
-    return this.borrowedBooksService.create(createBorrowedBookDto);
+  @Post("borrow")
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "Borrow a book" })
+  borrow(@Body() borrowBookDto: BorrowBookDto) {
+    return this.borrowedBooksService.borrow(borrowBookDto);
+  }
+
+  @Post("return/:id")
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "Return a book" })
+  return(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() returnBookDto: ReturnBookDto
+  ) {
+    return this.borrowedBooksService.return(id, returnBookDto);
   }
 
   @Get()
+  @ApiOperation({ summary: "Get all borrowed books" })
   findAll() {
     return this.borrowedBooksService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.borrowedBooksService.findOne(+id);
+  @Get("overdue")
+  @ApiOperation({ summary: "Get overdue books" })
+  findOverdue() {
+    return this.borrowedBooksService.findOverdue();
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBorrowedBookDto: UpdateBorrowedBookDto) {
-    return this.borrowedBooksService.update(+id, updateBorrowedBookDto);
+  @Get("student/:studentId")
+  @ApiOperation({ summary: "Get student's borrowed books" })
+  findByStudent(@Param("studentId", ParseIntPipe) studentId: number) {
+    return this.borrowedBooksService.findByStudent(studentId);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.borrowedBooksService.remove(+id);
+  @Get("book/:bookId")
+  @ApiOperation({ summary: "Get book borrowing history" })
+  findByBook(@Param("bookId", ParseIntPipe) bookId: number) {
+    return this.borrowedBooksService.findByBook(bookId);
+  }
+
+  @Patch("extend/:id")
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "Extend due date" })
+  extendDueDate(@Param("id", ParseIntPipe) id: number) {
+    return this.borrowedBooksService.extendDueDate(id);
   }
 }

@@ -8,7 +8,6 @@ import {
 import { InjectModel } from "@nestjs/sequelize";
 import { Student } from "./models/student.model";
 import { RegisterStudentDto } from "../auth/dto/register-student.dto";
-// import { Group } from "../groups/models/group.model";
 import { Op } from "sequelize";
 import * as bcrypt from "bcrypt";
 import { UpdateBalanceDto } from "./dto/update-balance.dto";
@@ -18,19 +17,10 @@ export class StudentService {
   constructor(
     @InjectModel(Student)
     private readonly studentModel: typeof Student
-    // @InjectModel(Group)
-    // private readonly groupModel: typeof Group
   ) {}
 
   async create(registerStudentDto: RegisterStudentDto): Promise<Student> {
     try {
-      // Check if group exists
-      // const group = await this.groupModel.findByPk(registerStudentDto.group_id);
-      // if (!group) {
-      //   throw new BadRequestException("Group not found");
-      // }
-
-      // Check if student with same email or phone already exists
       const existingStudent = await this.studentModel.findOne({
         where: {
           [Op.or]: [
@@ -46,14 +36,12 @@ export class StudentService {
         );
       }
 
-      // Hash password
       const hashedPassword = await bcrypt.hash(registerStudentDto.password, 12);
 
-      // Create student with pending approval
       const student = await this.studentModel.create({
         ...registerStudentDto,
         password: hashedPassword,
-        is_approved: false, // Admin tasdiqlashi kerak
+        is_approved: false,
       });
 
       return await this.findOne(student.id);
@@ -145,10 +133,7 @@ export class StudentService {
 
   async findAll(): Promise<Student[]> {
     try {
-      return await this.studentModel.findAll({
-        // include: [{ model: Group, attributes: ["id", "name"] }],
-        // order: [["createdAt", "DESC"]],
-      });
+      return await this.studentModel.findAll({});
     } catch (error) {
       throw new InternalServerErrorException("Failed to fetch students");
     }

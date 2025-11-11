@@ -7,7 +7,6 @@ import {
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { Op } from "sequelize";
-// import { TeacherSubject } from "./models/teacher-subject.model";
 import { Teacher } from "../teachers/models/teacher.model";
 import { Subject } from "../subjects/models/subject.model";
 import { CreateTeacherSubjectDto } from "./dto/create-teacher_subject.dto";
@@ -35,7 +34,6 @@ export class TeacherSubjectsService {
       throw new BadRequestException("Teacher ID and Subject ID are required");
     }
 
-    // Check if teacher exists
     const teacher = await this.teacherModel.findByPk(
       createTeacherSubjectDto.teacher_id
     );
@@ -43,7 +41,6 @@ export class TeacherSubjectsService {
       throw new NotFoundException("Teacher not found");
     }
 
-    // Check if subject exists
     const subject = await this.subjectModel.findByPk(
       createTeacherSubjectDto.subject_id
     );
@@ -51,7 +48,6 @@ export class TeacherSubjectsService {
       throw new NotFoundException("Subject not found");
     }
 
-    // Check if assignment already exists
     const existingAssignment = await this.teacherSubjectModel.findOne({
       where: {
         teacher_id: createTeacherSubjectDto.teacher_id,
@@ -202,7 +198,6 @@ export class TeacherSubjectsService {
       const subjectId =
         updateTeacherSubjectDto.subject_id || teacherSubject.subject_id;
 
-      // Check if new assignment already exists
       const existingAssignment = await this.teacherSubjectModel.findOne({
         where: {
           teacher_id: teacherId,
@@ -217,7 +212,6 @@ export class TeacherSubjectsService {
         );
       }
 
-      // Check if teacher exists
       if (updateTeacherSubjectDto.teacher_id) {
         const teacher = await this.teacherModel.findByPk(
           updateTeacherSubjectDto.teacher_id
@@ -227,7 +221,6 @@ export class TeacherSubjectsService {
         }
       }
 
-      // Check if subject exists
       if (updateTeacherSubjectDto.subject_id) {
         const subject = await this.subjectModel.findByPk(
           updateTeacherSubjectDto.subject_id

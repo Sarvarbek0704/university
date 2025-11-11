@@ -131,16 +131,16 @@ export class ClassroomsController {
     return this.classroomsService.getClassroomWithSchedules(id);
   }
 
-  // @Get(":id/weekly-schedule")
-  // @ApiOperation({ summary: "Get classroom weekly schedule" })
-  // @ApiParam({ name: "id", type: Number, description: "Classroom ID" })
-  // @ApiResponse({ status: 200, description: "Return classroom weekly schedule" })
-  // @ApiResponse({ status: 400, description: "Invalid classroom ID" })
-  // @ApiResponse({ status: 404, description: "Classroom not found" })
-  // @ApiResponse({ status: 500, description: "Internal server error" })
-  // async getWeeklySchedule(@Param("id", ParseIntPipe) id: number) {
-  //   return this.classroomsService.getWeeklySchedule(id);
-  // }
+  @Get(":id/weekly-schedule")
+  @ApiOperation({ summary: "Get classroom weekly schedule" })
+  @ApiParam({ name: "id", type: Number, description: "Classroom ID" })
+  @ApiResponse({ status: 200, description: "Return classroom weekly schedule" })
+  @ApiResponse({ status: 400, description: "Invalid classroom ID" })
+  @ApiResponse({ status: 404, description: "Classroom not found" })
+  @ApiResponse({ status: 500, description: "Internal server error" })
+  async getWeeklySchedule(@Param("id", ParseIntPipe) id: number) {
+    return this.classroomsService.getWeeklySchedule(id);
+  }
 
   @Patch(":id")
   @UseGuards(JwtAuthGuard, AdminGuard)

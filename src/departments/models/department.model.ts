@@ -91,13 +91,12 @@ export class Department extends Model {
   })
   is_active: boolean;
 
-  // Associations
   @BelongsTo(() => Faculty)
   faculty: Faculty;
 
   @HasMany(() => Teacher)
   teachers: Teacher[];
 
-  // @HasMany(() => Student)
-  // students: Student[];
+  @HasMany(() => Student)
+  students: Student[];
 }

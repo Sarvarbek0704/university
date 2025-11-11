@@ -10,11 +10,11 @@ import { Op } from "sequelize";
 import { Group } from "./models/group.model";
 import { Department } from "../departments/models/department.model";
 import { Student } from "../students/models/student.model";
-// import { InfoStudent } from "../info-students/models/info-student.model";
 import { Schedule } from "../schedules/models/schedule.model";
 import { CreateGroupDto } from "./dto/create-group.dto";
 import { UpdateGroupDto } from "./dto/update-group.dto";
 import { FilterGroupDto } from "./dto/filter-group.dto";
+import { InfoStudent } from "../info_students/models/info_student.model";
 
 @Injectable()
 export class GroupsService {
@@ -212,7 +212,6 @@ export class GroupsService {
 
     const group = await this.findOne(id);
 
-    // Check if group has related records
     const studentsCount = await group.$count("infoStudents");
     const schedulesCount = await group.$count("schedules");
     const examsCount = await group.$count("exams");
@@ -249,15 +248,15 @@ export class GroupsService {
           model: Department,
           attributes: ["id", "name"],
         },
-        // {
-        //   model: InfoStudent,
-        //   include: [
-        //     {
-        //       model: Student,
-        //       attributes: ["id", "full_name", "phone", "email"],
-        //     },
-        //   ],
-        // },
+        {
+          model: InfoStudent,
+          include: [
+            {
+              model: Student,
+              attributes: ["id", "full_name", "phone", "email"],
+            },
+          ],
+        },
       ],
     });
 

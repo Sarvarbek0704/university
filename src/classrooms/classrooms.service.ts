@@ -8,7 +8,6 @@ import {
 import { InjectModel } from "@nestjs/sequelize";
 import { Op, fn, col } from "sequelize";
 import { Classroom } from "./models/classroom.model";
-// import { Schedule } from "../schedules/models/schedule.model";
 import { CreateClassroomDto } from "./dto/create-classroom.dto";
 import { UpdateClassroomDto } from "./dto/update-classroom.dto";
 import { FilterClassroomDto } from "./dto/filter-classroom.dto";
@@ -70,18 +69,15 @@ export class ClassroomsService {
     if (filterDto.search) {
       const searchConditions: any[] = [];
 
-      // Matnli qidiruv
       searchConditions.push(
         { equipment: { [Op.iLike]: `%${filterDto.search}%` } },
         { location_description: { [Op.iLike]: `%${filterDto.search}%` } }
       );
 
-      // Agar search raqam bo'lsa, room_number ga qidirish
       const searchNumber = Number(filterDto.search);
       if (!isNaN(searchNumber)) {
         searchConditions.push({ room_number: searchNumber });
       } else {
-        // Agar matn bo'lsa, room_number ga iLike qidiruvi
         searchConditions.push({
           room_number: { [Op.iLike]: `%${filterDto.search}%` },
         });
@@ -331,7 +327,6 @@ export class ClassroomsService {
   }> {
     const { date, start_time, end_time, day_of_week } = availabilityDto;
 
-    // Barcha faol va mavjud darsxonalarni olish
     const availableClassrooms = await this.classroomModel.findAll({
       where: {
         is_active: true,
@@ -339,7 +334,6 @@ export class ClassroomsService {
       },
     });
 
-    // Soddalashtirilgan mavjudlik tekshiruvi
     if (availableClassrooms.length === 0) {
       return {
         available: false,
@@ -347,9 +341,7 @@ export class ClassroomsService {
       };
     }
 
-    // Agar sana va vaqt berilgan bo'lsa, jadval bo'yicha tekshirish
     if (date && start_time && end_time) {
-      // Haqiqiy loyihada jadval bo'yicha murakkab tekshiruv qo'shishingiz mumkin
       const availableForSlot = await this.getClassroomsAvailableForTimeSlot(
         date,
         start_time,
@@ -377,10 +369,8 @@ export class ClassroomsService {
   async getWeeklySchedule(id: number): Promise<any> {
     const classroom = await this.getClassroomWithSchedules(id);
 
-    // Kunlik jadvalni guruhlash
     const weeklySchedule: any = {};
     for (let day = 1; day <= 7; day++) {
-      // Type assertion yordamida schedules mavjudligini tekshirish
       const schedules = (classroom.get("schedules") as Schedule[]) || [];
       weeklySchedule[day] = schedules.filter(
         (schedule: Schedule) => schedule.day_of_week === day
@@ -410,14 +400,12 @@ export class ClassroomsService {
     });
 
     try {
-      // Tur bo'yicha hisoblash
       const types = await this.classroomModel.findAll({
         attributes: ["type", [fn("COUNT", col("id")), "count"]],
         group: ["type"],
         raw: true,
       });
 
-      // Qurilish raqami bo'yicha hisoblash
       const buildings = await this.classroomModel.findAll({
         attributes: ["building_number", [fn("COUNT", col("id")), "count"]],
         group: ["building_number"],
@@ -425,7 +413,6 @@ export class ClassroomsService {
         raw: true,
       });
 
-      // Qurilmalar bo'yicha statistikalar
       const withProjector = await this.classroomModel.count({
         where: { has_projector: true },
       });
@@ -451,7 +438,6 @@ export class ClassroomsService {
         },
       };
     } catch (error) {
-      // Agar aggregate query ishlamasa, oddiy statistikani qaytarish
       return {
         total,
         active,
@@ -467,7 +453,6 @@ export class ClassroomsService {
     }
   }
 
-  // Qo'shimcha metodlar
   async getClassroomsByEquipment(equipmentFilters: {
     has_projector?: boolean;
     has_computers?: boolean;
@@ -519,7 +504,6 @@ export class ClassroomsService {
     });
 
     try {
-      // Haftalik band qilingan soatlar
       const weeklyHours = await this.scheduleModel.findAll({
         attributes: ["day_of_week", [fn("COUNT", col("id")), "lessons_count"]],
         where: {
@@ -560,7 +544,6 @@ export class ClassroomsService {
     }
   }
 
-  // Vaqt oralig'ida mavjud darsxonalarni olish
   private async getClassroomsAvailableForTimeSlot(
     date: string,
     startTime: string,
@@ -586,7 +569,6 @@ export class ClassroomsService {
     });
   }
 
-  // Qurilish raqami va xona raqami bo'yicha qidirish
   async findByBuildingAndRoom(
     buildingNumber: number,
     roomNumber: number
@@ -600,7 +582,6 @@ export class ClassroomsService {
     });
   }
 
-  // Bir nechta darsxonalarni ID bo'yicha olish
   async findByIds(ids: number[]): Promise<Classroom[]> {
     return this.classroomModel.findAll({
       where: {

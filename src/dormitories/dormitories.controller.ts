@@ -39,7 +39,6 @@ export class DormitoriesController {
     private readonly dormitoryRoomsService: DormitoryRoomsService
   ) {}
 
-  // Dormitory endpoints
   @Post()
   @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({ summary: "Create a new dormitory" })
@@ -149,7 +148,6 @@ export class DormitoriesController {
     return this.dormitoriesService.toggleStatus(id);
   }
 
-  // Room endpoints
   @Post("rooms")
   @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({ summary: "Create a new dormitory room" })
@@ -198,35 +196,35 @@ export class DormitoriesController {
     return this.dormitoryRoomsService.getRoomWithStudents(roomId);
   }
 
-  // @Post("rooms/assign-student")
-  // @UseGuards(JwtAuthGuard, AdminGuard)
-  // @ApiOperation({ summary: "Assign student to dormitory room" })
-  // @ApiResponse({ status: 200, description: "Student assigned successfully" })
-  // @ApiResponse({ status: 400, description: "Bad request" })
-  // @ApiResponse({ status: 404, description: "Student or room not found" })
-  // @ApiResponse({
-  //   status: 409,
-  //   description: "Room is full or student already assigned",
-  // })
-  // @ApiResponse({ status: 500, description: "Internal server error" })
-  // async assignStudentToRoom(@Body() assignDto: AssignStudentToRoomDto) {
-  //   return this.dormitoryRoomsService.assignStudentToRoom(assignDto);
-  // }
+  @Post("rooms/assign-student")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiOperation({ summary: "Assign student to dormitory room" })
+  @ApiResponse({ status: 200, description: "Student assigned successfully" })
+  @ApiResponse({ status: 400, description: "Bad request" })
+  @ApiResponse({ status: 404, description: "Student or room not found" })
+  @ApiResponse({
+    status: 409,
+    description: "Room is full or student already assigned",
+  })
+  @ApiResponse({ status: 500, description: "Internal server error" })
+  async assignStudentToRoom(@Body() assignDto: AssignStudentToRoomDto) {
+    return this.dormitoryRoomsService.assignStudentToRoom(assignDto);
+  }
 
-  // @Delete("rooms/:roomId/students/:studentId")
-  // @UseGuards(JwtAuthGuard, AdminGuard)
-  // @HttpCode(HttpStatus.OK)
-  // @ApiOperation({ summary: "Remove student from dormitory room" })
-  // @ApiParam({ name: "roomId", type: Number, description: "Room ID" })
-  // @ApiParam({ name: "studentId", type: Number, description: "Student ID" })
-  // @ApiResponse({ status: 200, description: "Student removed successfully" })
-  // @ApiResponse({ status: 400, description: "Invalid IDs" })
-  // @ApiResponse({ status: 404, description: "Room or student not found" })
-  // @ApiResponse({ status: 500, description: "Internal server error" })
-  // async removeStudentFromRoom(
-  //   @Param("roomId", ParseIntPipe) roomId: number,
-  //   @Param("studentId", ParseIntPipe) studentId: number
-  // ) {
-  //   return this.dormitoryRoomsService.removeStudentFromRoom(roomId, studentId);
-  // }
+  @Delete("rooms/:roomId/students/:studentId")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: "Remove student from dormitory room" })
+  @ApiParam({ name: "roomId", type: Number, description: "Room ID" })
+  @ApiParam({ name: "studentId", type: Number, description: "Student ID" })
+  @ApiResponse({ status: 200, description: "Student removed successfully" })
+  @ApiResponse({ status: 400, description: "Invalid IDs" })
+  @ApiResponse({ status: 404, description: "Room or student not found" })
+  @ApiResponse({ status: 500, description: "Internal server error" })
+  async removeStudentFromRoom(
+    @Param("roomId", ParseIntPipe) roomId: number,
+    @Param("studentId", ParseIntPipe) studentId: number
+  ) {
+    return this.dormitoryRoomsService.removeStudentFromRoom(roomId, studentId);
+  }
 }

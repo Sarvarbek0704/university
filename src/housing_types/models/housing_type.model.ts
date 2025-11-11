@@ -7,7 +7,7 @@ import {
   Default,
   AllowNull,
 } from "sequelize-typescript";
-// import { InfoStudent } from "../../info-students/models/info-student.model";
+import { InfoStudent } from "../../info_students/models/info_student.model";
 
 @Table({
   tableName: "housing_types",
@@ -60,7 +60,6 @@ export class HousingType extends Model {
   })
   is_active: boolean;
 
-  // Associations
-  //   @HasMany(() => InfoStudent)
-  //   infoStudents: InfoStudent[];
+    @HasMany(() => InfoStudent)
+    infoStudents: InfoStudent[];
 }

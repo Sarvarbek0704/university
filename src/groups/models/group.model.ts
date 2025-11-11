@@ -10,8 +10,8 @@ import {
   AllowNull,
 } from "sequelize-typescript";
 import { Department } from "../../departments/models/department.model";
-// import { InfoStudent } from "../../info-students/models/info-student.model";
 import { Schedule } from "../../schedules/models/schedule.model";
+import { InfoStudent } from "../../info_students/models/info_student.model";
 // import { Exam } from "../../exams/models/exam.model";
 
 @Table({
@@ -100,16 +100,15 @@ export class Group extends Model {
   })
   is_active: boolean;
 
-  // Associations
   @BelongsTo(() => Department)
   department: Department;
 
-  //   @HasMany(() => InfoStudent)
-  //   infoStudents: InfoStudent[];
+  @HasMany(() => InfoStudent)
+  infoStudents: InfoStudent[];
 
   @HasMany(() => Schedule)
   schedules: Schedule[];
 
-  //   @HasMany(() => Exam)
-  //   exams: Exam[];
+    // @HasMany(() => Exam)
+    // exams: Exam[];
 }

@@ -213,7 +213,6 @@ export class InfoStudent extends Model {
   })
   is_active: boolean;
 
-  // Associations
   @BelongsTo(() => Student)
   student: Student;
 

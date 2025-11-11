@@ -10,11 +10,8 @@ import {
   AllowNull,
 } from "sequelize-typescript";
 import { Department } from "../../departments/models/department.model";
-// import { TeacherSubject } from "../../teacher-subjects/models/teacher-subject.model";
 import { Schedule } from "../../schedules/models/schedule.model";
 import { TeacherSubject } from "../../teacher_subjects/models/teacher_subject.mdoel";
-// import { CourseWork } from "../../course-works/models/course-work.model";
-// import { Exam } from "../../exams/models/exam.model";
 
 @Table({
   tableName: "subjects",
@@ -101,7 +98,6 @@ export class Subject extends Model {
   })
   is_active: boolean;
 
-  // Associations
   @BelongsTo(() => Department)
   department: Department;
 
@@ -110,6 +106,12 @@ export class Subject extends Model {
 
   @HasMany(() => Schedule)
   schedules: Schedule[];
+
+  // @HasMany(() => Prerequisite)
+  // prerequisires: Prerequisite[];
+
+  // @HasMany(() => FailedSubject)
+  // failedSubjects: FailedSubject[];
 
   //   @HasMany(() => CourseWork)
   //   courseWorks: CourseWork[];

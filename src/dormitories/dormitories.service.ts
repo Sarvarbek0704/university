@@ -241,7 +241,6 @@ export class DormitoriesService {
       where: { is_available: true },
     });
 
-    // Get total capacity and occupied beds
     const dormitories = await this.dormitoryModel.findAll({
       include: [
         {
@@ -275,7 +274,6 @@ export class DormitoriesService {
   async getDormitoryStats(id: number): Promise<any> {
     const dormitory = await this.getDormitoryWithRooms(id);
 
-    // Use the rooms from the included association
     const rooms = dormitory.rooms || [];
     const totalRooms = rooms.length;
     const availableRooms = rooms.filter(

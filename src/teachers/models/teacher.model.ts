@@ -12,7 +12,8 @@ import {
   HasMany,
 } from "sequelize-typescript";
 import { Department } from "../../departments/models/department.model";
-// import { Subject } from "../../subjects/models/subject.model";
+import { TeacherSubject } from "../../teacher_subjects/models/teacher_subject.mdoel";
+import { Schedule } from "../../schedules/models/schedule.model";
 
 @Table({
   tableName: "teachers",
@@ -204,7 +205,7 @@ export class Teacher extends Model {
   verification_otp: string;
 
   @Column({
-    type: DataType.DATE, // To'g'ri syntax
+    type: DataType.DATE,
     allowNull: true,
   })
   otp_expires_at: Date;
@@ -216,10 +217,15 @@ export class Teacher extends Model {
   })
   is_email_verified: boolean;
 
-  // Associations
   @BelongsTo(() => Department)
   department: Department;
 
-  // @HasMany(() => Subject)
-  // subjects: Subject[];
+  @HasMany(() => TeacherSubject)
+  teacherSubjects: TeacherSubject[];
+
+  @HasMany(() => Schedule)
+  schedules: Schedule[];
+
+  // @HasMany(() => Exam)
+  // exams: Exam[];
 }

@@ -158,7 +158,6 @@ export class Dormitory extends Model {
   })
   is_available: boolean;
 
-  // Associations
   @HasMany(() => DormitoryRoom)
   rooms: DormitoryRoom[];
 
@@ -170,7 +169,6 @@ export class Dormitory extends Model {
     }
   }
 
-  // Instance methods
   async getOccupiedBedsCount(): Promise<number> {
     const rooms = (await this.$get("rooms", {
       include: ["students"],

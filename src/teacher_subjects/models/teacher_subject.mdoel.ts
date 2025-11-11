@@ -72,7 +72,6 @@ export class TeacherSubject extends Model {
   })
   is_active: boolean;
 
-  // Associations
   @BelongsTo(() => Teacher)
   teacher: Teacher;
 

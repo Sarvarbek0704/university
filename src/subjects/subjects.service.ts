@@ -10,7 +10,6 @@ import { Op } from "sequelize";
 import { Subject } from "./models/subject.model";
 import { Department } from "../departments/models/department.model";
 import { Teacher } from "../teachers/models/teacher.model";
-// import { TeacherSubject } from "../teacher-subjects/models/teacher-subject.model";
 import { CreateSubjectDto } from "./dto/create-subject.dto";
 import { UpdateSubjectDto } from "./dto/update-subject.dto";
 import { FilterSubjectDto } from "./dto/filter-subject.dto";
@@ -186,7 +185,6 @@ export class SubjectsService {
 
     const subject = await this.findOne(id);
 
-    // Check if subject has related records
     const teacherSubjectsCount = await subject.$count("teacherSubjects");
     const schedulesCount = await subject.$count("schedules");
     const courseWorksCount = await subject.$count("courseWorks");

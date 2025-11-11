@@ -179,16 +179,13 @@ export class Classroom extends Model {
   })
   is_available: boolean;
 
-  // Virtual field for full room identifier
   get full_identifier(): string {
     return `B${this.building_number}-R${this.room_number}`;
   }
 
-  // Associations
   @HasMany(() => Schedule)
   schedules: Schedule[];
 
-  // Association mixins
 
   @BeforeUpdate
   @BeforeCreate
@@ -204,7 +201,6 @@ export class Classroom extends Model {
     }
   }
 
-  // Instance methods
   async isAvailableForTimeSlot(
     date: string,
     startTime: string,
@@ -216,10 +212,8 @@ export class Classroom extends Model {
     };
 
     if (date) {
-      // For specific date checking (one-time events)
       whereClause.date = date;
     } else if (dayOfWeek) {
-      // For recurring schedule checking
       whereClause.day_of_week = dayOfWeek;
     }
 

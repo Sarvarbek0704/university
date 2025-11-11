@@ -7,7 +7,7 @@ import {
   BelongsTo,
 } from "sequelize-typescript";
 import { Department } from "../../departments/models/department.model";
-// import { Group } from "../../groups/models/group.model";
+import { InfoStudent } from "../../info_students/models/info_student.model";
 
 @Table({
   tableName: "students",
@@ -112,19 +112,6 @@ export class Student extends Model {
   })
   is_email_verified: boolean;
 
-  // @ForeignKey(() => Department)
-  // @Column
-  // department_id: number;
-
-  // Foreign key - faqat group_id kerak
-  //   @ForeignKey(() => Group)
-  //   @Column({
-  //     type: DataType.INTEGER,
-  //     allowNull: false,
-  //   })
-  //   group_id: number;
-
-  //   // Association
-  //   @BelongsTo(() => Group)
-  //   group: Group;
+  @BelongsTo(() => InfoStudent)
+  infoStudent: InfoStudent;
 }

@@ -109,7 +109,6 @@ export class Faculty extends Model {
   })
   is_active: boolean;
 
-  // Associations
   @HasMany(() => Department)
   departments: Department[];
 }

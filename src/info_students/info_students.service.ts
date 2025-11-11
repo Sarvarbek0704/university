@@ -46,7 +46,6 @@ export class InfoStudentsService {
   async create(
     createInfoStudentDto: CreateInfoStudentDto
   ): Promise<InfoStudent> {
-    // Validate required fields
     if (
       !createInfoStudentDto?.student_id ||
       !createInfoStudentDto?.passport_series ||
@@ -57,7 +56,6 @@ export class InfoStudentsService {
       );
     }
 
-    // Check if student exists
     const student = await this.studentModel.findByPk(
       createInfoStudentDto.student_id
     );
@@ -65,7 +63,6 @@ export class InfoStudentsService {
       throw new NotFoundException("Student not found");
     }
 
-    // Check if student info already exists
     const existingInfo = await this.infoStudentModel.findOne({
       where: { student_id: createInfoStudentDto.student_id },
     });
@@ -75,7 +72,6 @@ export class InfoStudentsService {
       );
     }
 
-    // Check unique constraints
     const existingPassport = await this.infoStudentModel.findOne({
       where: { passport_series: createInfoStudentDto.passport_series },
     });
@@ -90,7 +86,6 @@ export class InfoStudentsService {
       throw new ConflictException("JSHSHIR already exists");
     }
 
-    // Validate related entities
     await this.validateRelatedEntities(createInfoStudentDto);
 
     const infoStudent = await this.infoStudentModel.create({
@@ -419,7 +414,6 @@ export class InfoStudentsService {
 
     const infoStudent = await this.findOne(id);
 
-    // Validate unique constraints if updating
     if (
       updateInfoStudentDto.passport_series &&
       updateInfoStudentDto.passport_series !== infoStudent.passport_series
@@ -450,7 +444,6 @@ export class InfoStudentsService {
       }
     }
 
-    // Validate related entities
     await this.validateRelatedEntities(updateInfoStudentDto);
 
     await infoStudent.update(updateInfoStudentDto);
@@ -512,7 +505,6 @@ export class InfoStudentsService {
   }
 
   private async validateRelatedEntities(dto: any): Promise<void> {
-    // Validate study form
     if (dto.study_form_id) {
       const studyForm = await this.studyFormModel.findByPk(dto.study_form_id);
       if (!studyForm) {
@@ -520,7 +512,6 @@ export class InfoStudentsService {
       }
     }
 
-    // Validate education type
     if (dto.education_type_id) {
       const educationType = await this.educationTypeModel.findByPk(
         dto.education_type_id
@@ -530,7 +521,6 @@ export class InfoStudentsService {
       }
     }
 
-    // Validate contract type
     if (dto.contract_type_id) {
       const contractType = await this.contractTypeModel.findByPk(
         dto.contract_type_id
@@ -540,7 +530,6 @@ export class InfoStudentsService {
       }
     }
 
-    // Validate group
     if (dto.group_id) {
       const group = await this.groupModel.findByPk(dto.group_id);
       if (!group) {
@@ -548,7 +537,6 @@ export class InfoStudentsService {
       }
     }
 
-    // Validate faculty
     if (dto.faculty_id) {
       const faculty = await this.facultyModel.findByPk(dto.faculty_id);
       if (!faculty) {
@@ -556,7 +544,6 @@ export class InfoStudentsService {
       }
     }
 
-    // Validate housing type
     if (dto.housing_type_id) {
       const housingType = await this.housingTypeModel.findByPk(
         dto.housing_type_id
@@ -566,7 +553,6 @@ export class InfoStudentsService {
       }
     }
 
-    // Validate dormitory room
     if (dto.dormitory_room_id) {
       const dormitoryRoom = await this.dormitoryRoomModel.findByPk(
         dto.dormitory_room_id
