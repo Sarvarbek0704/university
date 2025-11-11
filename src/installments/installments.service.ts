@@ -404,7 +404,7 @@ export class InstallmentsService {
 
     const startDate = new Date(rentContract.start_date);
     const endDate = new Date(rentContract.end_date);
-    const installments = [];
+    const installments: any[] = [];
 
     let currentDate = new Date(startDate);
     let monthCount = 0;

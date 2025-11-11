@@ -13,7 +13,7 @@ import { Teacher } from "../teachers/models/teacher.model";
 import { CreateSubjectDto } from "./dto/create-subject.dto";
 import { UpdateSubjectDto } from "./dto/update-subject.dto";
 import { FilterSubjectDto } from "./dto/filter-subject.dto";
-import { TeacherSubject } from "../teacher_subjects/models/teacher_subject.mdoel";
+import { TeacherSubject } from "../teacher_subjects/models/teacher_subject.model";
 
 @Injectable()
 export class SubjectsService {

@@ -12,8 +12,9 @@ import {
   HasMany,
 } from "sequelize-typescript";
 import { Department } from "../../departments/models/department.model";
-import { TeacherSubject } from "../../teacher_subjects/models/teacher_subject.mdoel";
+import { TeacherSubject } from "../../teacher_subjects/models/teacher_subject.model";
 import { Schedule } from "../../schedules/models/schedule.model";
+import { Exam } from "../../exams/models/exam.model";
 
 @Table({
   tableName: "teachers",
@@ -226,6 +227,6 @@ export class Teacher extends Model {
   @HasMany(() => Schedule)
   schedules: Schedule[];
 
-  // @HasMany(() => Exam)
-  // exams: Exam[];
+  @HasMany(() => Exam)
+  exams: Exam[];
 }

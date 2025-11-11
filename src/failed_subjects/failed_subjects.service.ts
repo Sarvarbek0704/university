@@ -132,7 +132,6 @@ export class FailedSubjectsService {
           where: {
             student_id: examResult.student_id,
             subject_id: examResult.exam.subject_id,
-            exam_attempt_id: examResult.exam_attempt_id,
           },
         });
 
@@ -678,7 +677,8 @@ export class FailedSubjectsService {
       retakes: urgentRetakes.map((failedSubject) => ({
         id: failedSubject.id,
         student_name: failedSubject.student.full_name,
-        student_group: failedSubject.student.group.name,
+        student_group:
+          (failedSubject.student as any).infoStudent?.group?.name || "Unknown",
         subject_name: failedSubject.subject.name,
         planned_date: failedSubject.formattedPlannedDate,
         days_until: failedSubject.daysUntilRetake,
@@ -768,7 +768,7 @@ export class FailedSubjectsService {
         [literal(`DATE_FORMAT(created_at, '${dateFormat}')`), "period"],
         [fn("COUNT", col("id")), "count"],
       ],
-      group: [literal("period")],
+      group: ["period"],
       order: [[literal("period"), "ASC"]],
       limit,
       raw: true,
@@ -799,10 +799,10 @@ export class FailedSubjectsService {
       })),
       resolution_status: {
         resolved: parseInt(
-          resolutionStats.find((item: any) => item.is_resolved)?.count || 0
+          resolutionStats.find((item: any) => item.is_resolved)?.["count"] || 0
         ),
         unresolved: parseInt(
-          resolutionStats.find((item: any) => !item.is_resolved)?.count || 0
+          resolutionStats.find((item: any) => !item.is_resolved)?.["count"] || 0
         ),
       },
     };
@@ -885,7 +885,7 @@ export class FailedSubjectsService {
     failedSubjects.forEach((failedSubject) => {
       // Fakultet bo'yicha
       const facultyName =
-        failedSubject.student?.group?.department?.faculty?.name || "Unknown";
+        (failedSubject.student as any)?.infoStudent?.faculty?.name || "Unknown";
       if (!report.by_faculty[facultyName]) {
         report.by_faculty[facultyName] = 0;
       }
@@ -893,7 +893,8 @@ export class FailedSubjectsService {
 
       // Kafedra bo'yicha
       const departmentName =
-        failedSubject.student?.group?.department?.name || "Unknown";
+        (failedSubject.student as any)?.infoStudent?.group?.department?.name ||
+        "Unknown";
       if (!report.by_department[departmentName]) {
         report.by_department[departmentName] = 0;
       }

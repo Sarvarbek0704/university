@@ -49,7 +49,7 @@ export class StudentCreditsController {
   @Get("student/:studentId/summary")
   @ApiOperation({ summary: "Get student academic summary" })
   async getStudentSummary(@Param("studentId", ParseIntPipe) studentId: number) {
-    return this.studentCreditsService.getStudentSummary(studentId);
+    return this.studentCreditsService.getStudentCreditsOverview(studentId);
   }
 
   @Get(":id")

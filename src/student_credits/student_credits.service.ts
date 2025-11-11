@@ -50,7 +50,7 @@ export class StudentCreditsService {
       );
     }
 
-    return this.studentCreditModel.create(createStudentCreditDto);
+    return this.studentCreditModel.create(createStudentCreditDto as any);
   }
 
   async findAll(): Promise<StudentCredit[]> {
@@ -102,21 +102,17 @@ export class StudentCreditsService {
     return { message: "Student credit record deleted successfully" };
   }
 
-  async getStudentSummary(studentId: number): Promise<any> {
-    const student = await this.studentModel.findByPk(studentId, {
-      include: [
-        {
-          model: StudentCredit,
-          order: [["semester_id", "ASC"]],
-        },
-      ],
-    });
+  async getStudentCreditsOverview(studentId: number): Promise<any> {
+    const student = await this.studentModel.findByPk(studentId);
 
     if (!student) {
       throw new NotFoundException(`Student with ID ${studentId} not found`);
     }
 
-    const credits = student.student_credits || [];
+    const credits = await this.studentCreditModel.findAll({
+      where: { student_id: studentId },
+      order: [["semester_id", "ASC"]],
+    });
 
     const totalCredits = credits.reduce(
       (sum, credit) => sum + credit.total_credits,
@@ -162,7 +158,6 @@ export class StudentCreditsService {
       throw new NotFoundException(`Student with ID ${studentId} not found`);
     }
 
-    // Talabaning barcha imtihon natijalarini olish
     const examResults = await this.examResultModel.findAll({
       where: { student_id: studentId },
       include: [
@@ -179,7 +174,6 @@ export class StudentCreditsService {
       ],
     });
 
-    // Semester bo'yicha guruhlash
     const semesterData: {
       [semester: number]: { credits: number; points: number; count: number };
     } = {};
@@ -200,8 +194,7 @@ export class StudentCreditsService {
       }
     });
 
-    // Har bir semester uchun credit record ni yaratish yoki yangilash
-    const results = [];
+    const results: any[] = [];
     for (const [semester, data] of Object.entries(semesterData)) {
       const semesterNum = parseInt(semester);
       const gpa = data.credits > 0 ? data.points / data.credits : 0;

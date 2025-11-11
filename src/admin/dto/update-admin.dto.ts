@@ -65,7 +65,6 @@ export class UpdateAdminDto extends PartialType(CreateAdminDto) {
   @IsString()
   admin_type?: string;
 
-  // Password update with validation
   @ApiPropertyOptional({
     example: "newSecurePassword123",
     description: "New password (minimum 6 characters)",

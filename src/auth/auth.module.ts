@@ -10,6 +10,7 @@ import { TeachersModule } from "../teachers/teachers.module";
 import { StudentsModule } from "../students/students.module";
 import { MailService } from "../common/services/mail.service";
 import { OtpService } from "../common/services/otp.service";
+import { CustomLogger } from "../common/services/logger.service";
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { OtpService } from "../common/services/otp.service";
     ConfigModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, MailService, OtpService],
+  providers: [AuthService, JwtStrategy, MailService, OtpService, CustomLogger],
   exports: [AuthService],
 })
 export class AuthModule {}

@@ -52,7 +52,7 @@ export class CookieService {
     });
   }
 
-  private getCookieName(type: "admin" | "teacher" | "student"): string {
+  getCookieName(type: "admin" | "teacher" | "student"): string {
     const cookieNames = {
       admin: "refresh_token",
       teacher: "teacher_refresh_token",

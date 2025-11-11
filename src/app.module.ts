@@ -23,7 +23,7 @@ import { InfoStudentsModule } from "./info_students/info_students.module";
 import { PaymentTypesModule } from "./payment_types/payment_types.module";
 import { RentContractsModule } from "./rent_contracts/rent_contracts.module";
 import { InstallmentsModule } from "./installments/installments.module";
-import { ScolarshipTransactionsModule } from "./scolarship_transactions/scolarship_transactions.module";
+import { ScholarshipTransactionsModule } from "./scolarship_transactions/scolarship_transactions.module";
 import { ExamResultsModule } from "./exam_results/exam_results.module";
 import { ExamAttemptsModule } from "./exam_attempts/exam_attempts.module";
 import { FailedSubjectsModule } from "./failed_subjects/failed_subjects.module";
@@ -45,6 +45,36 @@ import { CommonModule } from "./common/common.module";
 import { CustomLogger } from "./common/services/logger.service";
 import { Teacher } from "./teachers/models/teacher.model";
 import { Student } from "./students/models/student.model";
+import { InfoStudent } from "./info_students/models/info_student.model";
+import { TeacherSubject } from "./teacher_subjects/models/teacher_subject.model";
+import { Subject } from "./subjects/models/subject.model";
+import { Schedule } from "./schedules/models/schedule.model";
+import { Attendance } from "./attendance/models/attendance.model";
+import { Exam } from "./exams/models/exam.model";
+import { ExamAttempt } from "./exam_attempts/models/exam_attempt.model";
+import { ExamResult } from "./exam_results/models/exam_result.model";
+import { FailedSubject } from "./failed_subjects/models/failed_subject.model";
+import { CourseWork } from "./course_works/models/course_work.model";
+import { Payment } from "./payments/models/payment.model";
+import { PaymentType } from "./payment_types/models/payment_type.model";
+import { Installment } from "./installments/models/installment.model";
+import { Scholarship } from "./scholarships/models/scholarship.model";
+import { ScholarshipTransaction } from "./scolarship_transactions/models/scolarship_transaction.model";
+import { RentContract } from "./rent_contracts/models/rent_contract.model";
+import { LibraryBook } from "./library_books/models/library_book.model";
+import { BorrowedBook } from "./borrowed_books/models/borrowed_book.model";
+import { Dormitory } from "./dormitories/models/dormitory.model";
+import { DormitoryRoom } from "./dormitories/models/dormitory-room.model";
+import { Classroom } from "./classrooms/models/classroom.model";
+import { StudyForm } from "./study_forms/models/study_form.model";
+import { EducationType } from "./education_types/models/education_type.model";
+import { ContractType } from "./contract_types/models/contract_type.model";
+import { HousingType } from "./housing_types/models/housing_type.model";
+import { Group } from "./groups/models/group.model";
+import { StudentCredit } from "./student_credits/models/student_credit.model";
+import { Prerequisite } from "./prerequisites/models/prerequisite.model";
+import { Notification } from "./notifications/models/notification.model";
+import { Internship } from "./internships/models/internship.model";
 
 @Module({
   imports: [
@@ -60,7 +90,8 @@ import { Student } from "./students/models/student.model";
       username: process.env.DB_USERNAME || "postgres",
       password: process.env.DB_PASSWORD || "password",
       database: process.env.DB_NAME || "university_management",
-      models: [Admin, Department, Faculty, Student, Teacher],
+      // explicit empty models to avoid file-path scanning issues in dev
+      models: [],
       autoLoadModels: true,
       synchronize: process.env.DB_SYNC === "true" || true,
       logging: console.log,
@@ -89,7 +120,7 @@ import { Student } from "./students/models/student.model";
     PaymentTypesModule,
     RentContractsModule,
     InstallmentsModule,
-    ScolarshipTransactionsModule,
+    ScholarshipTransactionsModule,
     ExamResultsModule,
     ExamAttemptsModule,
     FailedSubjectsModule,

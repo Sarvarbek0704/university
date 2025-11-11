@@ -60,6 +60,6 @@ export class HousingType extends Model {
   })
   is_active: boolean;
 
-    @HasMany(() => InfoStudent)
-    infoStudents: InfoStudent[];
+  @HasMany(() => InfoStudent)
+  infoStudents: InfoStudent[];
 }

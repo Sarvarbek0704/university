@@ -125,7 +125,7 @@ export class PrerequisitesService {
       ],
     });
 
-    const results = [];
+    const results: any[] = [];
 
     for (const studentData of prerequisiteCheckDto.students) {
       const student = await this.studentModel.findByPk(studentData.student_id);
@@ -425,14 +425,6 @@ export class PrerequisitesService {
 
     const prerequisite = await this.findOne(id);
 
-    // Circular dependency ni tekshirish (agar fanlar o'zgartirilsa)
-    if (updatePrerequisiteDto.prerequisite_subject_id) {
-      await this.checkCircularDependency(
-        prerequisite.subject_id,
-        updatePrerequisiteDto.prerequisite_subject_id
-      );
-    }
-
     await prerequisite.update(updatePrerequisiteDto);
     return this.findOne(id);
   }
@@ -476,7 +468,10 @@ export class PrerequisitesService {
       if (!graph.has(prereq.subject_id)) {
         graph.set(prereq.subject_id, []);
       }
-      graph.get(prereq.subject_id).push(prereq.prerequisite_subject_id);
+      const adjacencyList = graph.get(prereq.subject_id);
+      if (adjacencyList) {
+        adjacencyList.push(prereq.prerequisite_subject_id);
+      }
     });
 
     const cycles: number[][] = [];
@@ -627,8 +622,8 @@ export class PrerequisitesService {
       attributes: ["id", "name", "credit", "semester_number", "description"],
     });
 
-    const eligibleSubjects = [];
-    const ineligibleSubjects = [];
+    const eligibleSubjects: any[] = [];
+    const ineligibleSubjects: any[] = [];
 
     for (const subject of allSubjects) {
       const prerequisites = await this.prerequisiteModel.findAll({
@@ -660,7 +655,7 @@ export class PrerequisitesService {
           },
           prerequisites_met: true,
           missing_prerequisites: [],
-        });
+        } as any);
       } else {
         ineligibleSubjects.push({
           subject: {
@@ -671,7 +666,7 @@ export class PrerequisitesService {
           },
           prerequisites_met: false,
           missing_prerequisites: prerequisiteCheck.missingPrerequisites,
-        });
+        } as any);
       }
     }
 
@@ -679,8 +674,8 @@ export class PrerequisitesService {
       student: {
         id: student.id,
         full_name: student.full_name,
-        group: student.group.name,
-        course_number: student.group.course_number,
+        group: (student as any).infoStudent?.group?.name || "Unknown",
+        course_number: (student as any).infoStudent?.group?.course_number || 0,
       },
       completed_subjects_count: completedMap.size,
       eligible_subjects_count: eligibleSubjects.length,

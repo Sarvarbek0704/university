@@ -11,7 +11,11 @@ import {
 } from "sequelize-typescript";
 import { Department } from "../../departments/models/department.model";
 import { Schedule } from "../../schedules/models/schedule.model";
-import { TeacherSubject } from "../../teacher_subjects/models/teacher_subject.mdoel";
+import { TeacherSubject } from "../../teacher_subjects/models/teacher_subject.model";
+import { Prerequisite } from "../../prerequisites/models/prerequisite.model";
+import { FailedSubject } from "../../failed_subjects/models/failed_subject.model";
+import { CourseWork } from "../../course_works/models/course_work.model";
+import { Exam } from "../../exams/models/exam.model";
 
 @Table({
   tableName: "subjects",
@@ -107,15 +111,15 @@ export class Subject extends Model {
   @HasMany(() => Schedule)
   schedules: Schedule[];
 
-  // @HasMany(() => Prerequisite)
-  // prerequisires: Prerequisite[];
+  @HasMany(() => Prerequisite)
+  prerequisires: Prerequisite[];
 
-  // @HasMany(() => FailedSubject)
-  // failedSubjects: FailedSubject[];
+  @HasMany(() => FailedSubject)
+  failedSubjects: FailedSubject[];
 
-  //   @HasMany(() => CourseWork)
-  //   courseWorks: CourseWork[];
+  @HasMany(() => CourseWork)
+  courseWorks: CourseWork[];
 
-  //   @HasMany(() => Exam)
-  //   exams: Exam[];
+  @HasMany(() => Exam)
+  exams: Exam[];
 }

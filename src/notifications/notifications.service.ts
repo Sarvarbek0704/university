@@ -28,7 +28,9 @@ export class NotificationsService {
         ...createNotificationDto,
         sent_at: createNotificationDto.send_immediately
           ? new Date()
-          : new Date(createNotificationDto.scheduled_for),
+          : createNotificationDto.scheduled_for
+            ? new Date(createNotificationDto.scheduled_for)
+            : new Date(),
       };
 
       if (createNotificationDto.expires_at) {
@@ -375,7 +377,7 @@ export class NotificationsService {
     });
 
     // Daily/weekly/monthly statistics
-    let periodStats = [];
+    let periodStats: any[] = [];
     if (statsDto.period) {
       let groupBy: string;
       let dateFormat: string;

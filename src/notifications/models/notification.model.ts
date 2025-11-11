@@ -128,7 +128,7 @@ export class Notification extends Model {
     type: DataType.DATE,
     allowNull: true,
   })
-  read_at: Date;
+  read_at: Date | null;
 
   @Default(false)
   @AllowNull(false)

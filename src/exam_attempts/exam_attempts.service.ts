@@ -648,11 +648,12 @@ export class ExamAttemptsService {
       }
     });
 
+    const improvementValues = Object.values(improvementByExam) as any[];
     const overallImprovement =
-      Object.values(improvementByExam).reduce(
-        (total: number, exam: any) => total + exam.improvement,
+      improvementValues.reduce(
+        (total: number, exam: any) => total + (exam.improvement || 0),
         0
-      ) / Object.keys(improvementByExam).length;
+      ) / (improvementValues.length || 1);
 
     return {
       student: {
@@ -660,7 +661,7 @@ export class ExamAttemptsService {
         full_name: student.full_name,
       },
       overall_improvement: Math.round(overallImprovement * 100) / 100,
-      improvement_by_exam: Object.values(improvementByExam),
+      improvement_by_exam: improvementValues,
       total_exams_with_retakes: Object.keys(improvementByExam).length,
     };
   }

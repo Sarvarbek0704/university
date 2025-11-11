@@ -3,11 +3,12 @@ import {
   Column,
   Model,
   DataType,
-  ForeignKey,
   BelongsTo,
+  HasOne,
+  ForeignKey,
 } from "sequelize-typescript";
-import { Department } from "../../departments/models/department.model";
 import { InfoStudent } from "../../info_students/models/info_student.model";
+import { Department } from "../../departments/models/department.model";
 
 @Table({
   tableName: "students",
@@ -112,6 +113,13 @@ export class Student extends Model {
   })
   is_email_verified: boolean;
 
-  @BelongsTo(() => InfoStudent)
+  @ForeignKey(() => Department)
+  @Column({ type: DataType.INTEGER, allowNull: false })
+  departmentId: number;
+
+  @BelongsTo(() => Department)
+  department: Department;
+
+  @HasOne(() => InfoStudent)
   infoStudent: InfoStudent;
 }

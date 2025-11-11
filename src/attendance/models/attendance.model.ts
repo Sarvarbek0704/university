@@ -144,7 +144,6 @@ export class Attendance extends Model {
   @BeforeUpdate
   @BeforeCreate
   static validateAttendance(attendance: Attendance) {
-    // Vaqt formati tekshirish
     if (attendance.actual_arrival_time) {
       const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
       if (!timeRegex.test(attendance.actual_arrival_time)) {
@@ -159,12 +158,10 @@ export class Attendance extends Model {
       }
     }
 
-    // Agar kechikkan bo'lsa, actual_arrival_time talab qilinadi
     if (attendance.status === "LATE" && !attendance.actual_arrival_time) {
       throw new Error("Actual arrival time is required for LATE status");
     }
 
-    // Agar erta ketgan bo'lsa, actual_departure_time talab qilinadi
     if (
       attendance.status === "LEAVE_EARLY" &&
       !attendance.actual_departure_time

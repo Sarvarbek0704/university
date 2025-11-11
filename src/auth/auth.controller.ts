@@ -267,9 +267,7 @@ export class AuthController {
   @ApiResponse({ status: 401, description: "Unauthorized" })
   async getAdminProfile(@Req() req: any) {
     const admin = await this.adminService.findOne(req.user.id);
-    const department = admin.department_id
-      ? await this.adminService.getAdminDepartment(admin.id)
-      : null;
+    const department = admin.department || null;
 
     return {
       id: admin.id,
@@ -302,9 +300,7 @@ export class AuthController {
   @ApiResponse({ status: 401, description: "Unauthorized" })
   async getTeacherProfile(@Req() req: any) {
     const teacher = await this.teacherService.findOne(req.user.id);
-    const department = await this.teacherService.getTeacherDepartment(
-      teacher.id
-    );
+    const department = teacher.department || null;
 
     return {
       id: teacher.id,
@@ -336,9 +332,7 @@ export class AuthController {
   @ApiResponse({ status: 401, description: "Unauthorized" })
   async getStudentProfile(@Req() req: any) {
     const student = await this.studentService.findOne(req.user.id);
-    const department = student.department_id
-      ? await this.studentService.getStudentDepartment(student.id)
-      : null;
+    const info = (student as any).infoStudent || null;
 
     return {
       id: student.id,
@@ -346,15 +340,15 @@ export class AuthController {
       email: student.email,
       phone: student.phone,
       address: student.address,
-      student_id: student.student_id,
-      department: department
+      student_id: info ? info.student_id : null,
+      department: info?.faculty
         ? {
-            id: department.id,
-            name: department.name,
-            code: department.code,
+            id: info.faculty.id,
+            name: info.faculty.name,
+            code: info.faculty.code,
           }
         : null,
-      enrollment_date: student.enrollment_date,
+      enrollment_date: info ? info.join_year : null,
       balance: student.balance,
       is_approved: student.is_approved,
       is_active: student.is_active,

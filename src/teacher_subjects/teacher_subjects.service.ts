@@ -11,7 +11,7 @@ import { Teacher } from "../teachers/models/teacher.model";
 import { Subject } from "../subjects/models/subject.model";
 import { CreateTeacherSubjectDto } from "./dto/create-teacher_subject.dto";
 import { UpdateTeacherSubjectDto } from "./dto/update-teacher_subject.dto";
-import { TeacherSubject } from "./models/teacher_subject.mdoel";
+import { TeacherSubject } from "./models/teacher_subject.model";
 
 @Injectable()
 export class TeacherSubjectsService {

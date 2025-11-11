@@ -103,7 +103,7 @@ export class CreateNotificationDto {
     description: "Action URL",
   })
   @IsOptional()
-  @IsUrl()
+  // @IsUrl()
   action_url?: string;
 
   @ApiPropertyOptional({

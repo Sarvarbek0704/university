@@ -192,7 +192,7 @@ export class FailedSubject extends Model {
     type: DataType.DATE,
     allowNull: true,
   })
-  resolved_at: Date;
+  resolved_at: Date | null;
 
   @BelongsTo(() => Student)
   student: Student;
@@ -269,7 +269,7 @@ export class FailedSubject extends Model {
     return new Date() > this.planned_retake_date;
   }
 
-  get daysUntilRetake(): number {
+  get daysUntilRetake(): number | null {
     if (!this.planned_retake_date || this.is_resolved) {
       return null;
     }
@@ -284,6 +284,7 @@ export class FailedSubject extends Model {
     if (!this.planned_retake_date) return "NO_DATE";
 
     const days = this.daysUntilRetake;
+    if (days === null) return "NO_DATE";
     if (days < 0) return "OVERDUE";
     if (days <= 7) return "URGENT";
     if (days <= 30) return "SOON";

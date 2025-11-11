@@ -7,6 +7,7 @@ import { Subject } from "../subjects/models/subject.model";
 import { Group } from "../groups/models/group.model";
 import { Teacher } from "../teachers/models/teacher.model";
 import { ExamResult } from "../exam_results/models/exam_result.model";
+import { ExamAttempt } from "../exam_attempts/models/exam_attempt.model";
 
 @Module({
   imports: [

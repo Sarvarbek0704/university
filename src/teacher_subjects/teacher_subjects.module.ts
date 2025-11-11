@@ -4,7 +4,7 @@ import { TeacherSubjectsService } from "./teacher_subjects.service";
 import { TeacherSubjectsController } from "./teacher_subjects.controller";
 import { Teacher } from "../teachers/models/teacher.model";
 import { Subject } from "../subjects/models/subject.model";
-import { TeacherSubject } from "./models/teacher_subject.mdoel";
+import { TeacherSubject } from "./models/teacher_subject.model";
 
 @Module({
   imports: [SequelizeModule.forFeature([TeacherSubject, Teacher, Subject])],

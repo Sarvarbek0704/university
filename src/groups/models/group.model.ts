@@ -12,7 +12,7 @@ import {
 import { Department } from "../../departments/models/department.model";
 import { Schedule } from "../../schedules/models/schedule.model";
 import { InfoStudent } from "../../info_students/models/info_student.model";
-// import { Exam } from "../../exams/models/exam.model";
+import { Exam } from "../../exams/models/exam.model";
 
 @Table({
   tableName: "groups",
@@ -109,6 +109,6 @@ export class Group extends Model {
   @HasMany(() => Schedule)
   schedules: Schedule[];
 
-    // @HasMany(() => Exam)
-    // exams: Exam[];
+  @HasMany(() => Exam)
+  exams: Exam[];
 }

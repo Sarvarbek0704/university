@@ -36,13 +36,11 @@ export class AttendanceService {
   ) {}
 
   async create(createAttendanceDto: CreateAttendanceDto): Promise<Attendance> {
-    // Talaba va jadval mavjudligini tekshirish
     await this.validateStudentAndSchedule(
       createAttendanceDto.student_id,
       createAttendanceDto.schedule_id
     );
 
-    // Bir xil kuni bir xil dars uchun davomat mavjudligini tekshirish
     const existingAttendance = await this.attendanceModel.findOne({
       where: {
         student_id: createAttendanceDto.student_id,
@@ -81,7 +79,6 @@ export class AttendanceService {
       errors: [] as string[],
     };
 
-    // Jadval mavjudligini tekshirish
     const schedule = await this.scheduleModel.findByPk(
       bulkAttendanceDto.schedule_id
     );
@@ -91,7 +88,6 @@ export class AttendanceService {
 
     for (const studentAttendance of bulkAttendanceDto.students) {
       try {
-        // Talaba mavjudligini tekshirish
         const student = await this.studentModel.findByPk(
           studentAttendance.student_id
         );
@@ -103,7 +99,6 @@ export class AttendanceService {
           continue;
         }
 
-        // Bir xil kuni bir xil dars uchun davomat mavjudligini tekshirish
         const existingAttendance = await this.attendanceModel.findOne({
           where: {
             student_id: studentAttendance.student_id,
@@ -113,7 +108,6 @@ export class AttendanceService {
         });
 
         if (existingAttendance) {
-          // Mavjud bo'lsa, yangilash
           await existingAttendance.update({
             status: studentAttendance.status,
             notes: studentAttendance.notes,
@@ -121,7 +115,6 @@ export class AttendanceService {
             actual_departure_time: studentAttendance.actual_departure_time,
           });
         } else {
-          // Yangi yaratish
           await this.attendanceModel.create({
             student_id: studentAttendance.student_id,
             schedule_id: bulkAttendanceDto.schedule_id,
@@ -354,7 +347,6 @@ export class AttendanceService {
       }
     }
 
-    // Bir xil kuni bir xil dars uchun boshqa davomat mavjudligini tekshirish
     if (
       (updateAttendanceDto.student_id || attendance.student_id) &&
       (updateAttendanceDto.schedule_id || attendance.schedule_id) &&
@@ -402,8 +394,6 @@ export class AttendanceService {
 
     return this.findOne(id);
   }
-
-  // ========== STATISTICS METHODS ==========
 
   async getAttendanceStats(statsDto: AttendanceStatsDto): Promise<any> {
     const whereClause: any = {
@@ -549,8 +539,6 @@ export class AttendanceService {
     }));
   }
 
-  // ========== UTILITY METHODS ==========
-
   private async validateStudentAndSchedule(
     studentId: number,
     scheduleId: number
@@ -688,7 +676,6 @@ export class AttendanceService {
         time: `${record.schedule.start_time} - ${record.schedule.end_time}`,
       });
 
-      // Kunlik statusni aniqlash (agar birorta dars bo'lsa present deb hisoblanadi)
       if (record.isPresent) {
         dailyStats[dateStr].status = "PRESENT";
         monthlySummary.present_days++;
@@ -708,8 +695,6 @@ export class AttendanceService {
       daily_attendance: Object.values(dailyStats),
     };
   }
-
-  // Attendance.service.ts ga qo'shimcha metodlar
 
   async getAttendanceHeatmap(
     studentId: number,
@@ -738,7 +723,6 @@ export class AttendanceService {
       order: [["date", "ASC"]],
     });
 
-    // Kunlik davomat statistikasini yaratish
     const heatmapData: any = {};
     const currentDate = new Date(startDate);
     const end = new Date(endDate);
@@ -841,7 +825,6 @@ export class AttendanceService {
       }
     });
 
-    // Foizlarni hisoblash
     Object.values(subjectStats).forEach((stat: any) => {
       stat.attendance_percentage =
         stat.total_classes > 0
@@ -952,12 +935,10 @@ export class AttendanceService {
     const studentStats: any = {};
     const subjectStats: any = {};
 
-    // Talaba va fan bo'yicha statistikani hisoblash
     attendanceRecords.forEach((record) => {
       const studentId = record.student_id;
       const subjectId = record.schedule.subject.id;
 
-      // Talaba statistikasi
       if (!studentStats[studentId]) {
         studentStats[studentId] = {
           student_id: studentId,
@@ -981,7 +962,6 @@ export class AttendanceService {
         studentStats[studentId].late_classes++;
       }
 
-      // Fan statistikasi
       if (!subjectStats[subjectId]) {
         subjectStats[subjectId] = {
           subject_id: subjectId,
@@ -998,7 +978,6 @@ export class AttendanceService {
       }
     });
 
-    // Foizlarni hisoblash
     Object.values(studentStats).forEach((stat: any) => {
       stat.attendance_percentage =
         stat.total_classes > 0

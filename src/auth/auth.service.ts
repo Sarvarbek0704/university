@@ -23,6 +23,8 @@ import { MailService } from "../common/services/mail.service";
 import { OtpService } from "../common/services/otp.service";
 import { InjectConnection } from "@nestjs/sequelize";
 import { Sequelize, QueryTypes } from "sequelize";
+import { ChangePasswordDto } from "./dto/change-password.dto";
+import { CustomLogger } from "../common/services/logger.service";
 
 @Injectable()
 export class AuthService {
@@ -36,7 +38,8 @@ export class AuthService {
     private readonly mailService: MailService,
     private readonly otpService: OtpService,
     @InjectConnection()
-    private readonly sequelize: Sequelize
+    private readonly sequelize: Sequelize,
+    private readonly logger: CustomLogger
   ) {}
 
   async registerAdmin(registerAdminDto: RegisterAdminDto) {

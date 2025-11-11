@@ -254,7 +254,6 @@ export class AttendanceController {
     return this.attendanceService.toggleStatus(id);
   }
 
-  // attendance.controller.ts ga qo'shimcha endpointlar
 
   @Get("student/:studentId/heatmap")
   @ApiOperation({ summary: "Get attendance heatmap for student" })
